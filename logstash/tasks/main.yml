@@ -1,0 +1,29 @@
+---
+- name: Install Logstash
+  apt:
+    name: logstash
+    state: latest
+  become: true
+
+- name: Configure Logstash Beats
+  copy:
+    src: logstash.yml
+    dest: /etc/logstash/logstash.yml
+    owner: root
+    group: root
+  become: true
+
+- name: Configure Logstash Beats
+  copy:
+    src: beats.conf
+    dest: /etc/logstash/conf.d/beats.conf
+    owner: root
+    group: root
+  become: true
+
+- name: Enable Logstash service
+  systemd:
+    name: logstash
+    state: restarted
+    enabled: yes
+  become: true

@@ -1,0 +1,29 @@
+---
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch
+    state: latest
+  become: true
+
+- name: Configure Elasticsearch
+  copy:
+    src: elasticsearch.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+  become: true
+
+- name: Enable Elasticsearch service
+  systemd:
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+  become: true
+
+- name: Wait for service to be up & running
+  wait_for:
+    timeout: 60
+    host: 192.168.33.33
+    port: 9200
+  tags:
+    - check

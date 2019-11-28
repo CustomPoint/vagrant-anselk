@@ -1,0 +1,29 @@
+---
+- name: Install Java JRE JDK 8
+  apt:
+    name: openjdk-8-jre-headless
+    state: latest
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+  become: true
+
+- name: Add the Elastic apt key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  become: true
+
+- name: Add elasti-6.x repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    state: present
+    filename: elasti-6.x
+  become: true
+
+- name: Upgrade all packages to the latest version
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+  become: true

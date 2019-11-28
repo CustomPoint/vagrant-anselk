@@ -1,0 +1,21 @@
+---
+- name: Install Kibana
+  apt:
+    name: kibana
+    state: latest
+  become: true
+
+- name: Configure Kibana
+  copy:
+    src: kibana.yml
+    dest: /etc/kibana/kibana.yml
+    owner: root
+    group: root
+  become: true
+
+- name: Enable Kibana service
+  systemd:
+    name: kibana
+    state: restarted
+    enabled: yes
+  become: true

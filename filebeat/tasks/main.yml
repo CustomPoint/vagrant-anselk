@@ -1,0 +1,44 @@
+---
+- name: Install Filebeat
+  apt:
+    name: filebeat
+    state: latest
+  become: true
+
+- name: Configure Filebeat
+  copy:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+  become: true
+
+- name: Configure Filebeat Index
+  copy:
+    src: filebeat.template.json
+    dest: /etc/filebeat/filebeat.template.json
+    owner: root
+    group: root
+  become: true
+
+- name: Create a Filebeat index
+  uri:
+    url: http://192.168.33.33:9200/_template/filebeat
+    method: PUT
+    body: "{{ lookup('file','filebeat.template.json') }}"
+    body_format: json
+  become: true
+  tags:
+    - index
+
+- name: Enable Filebeat Logstash module
+  shell: filebeat modules enable logstash
+  become: True
+
+- name: Enable Filebeat service
+  systemd:
+    name: filebeat
+    state: restarted
+    enabled: yes
+  become: true
+

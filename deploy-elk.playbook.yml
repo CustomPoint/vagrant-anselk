@@ -1,0 +1,8 @@
+---
+- hosts: elk
+  roles:
+    - prerequisites
+    - elasticsearch
+    - logstash
+    - kibana
+    - filebeat

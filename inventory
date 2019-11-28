@@ -1,0 +1,6 @@
+[elk]
+elk    ansible_host=192.168.33.33
+
+[elk:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_pass=vagrant
